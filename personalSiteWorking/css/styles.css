@@ -1,4 +1,5 @@
 body {
+  color: #40514e;
   margin: 0;
   font-family: "Merriweather", serif;
   /* font-size: 2em; */
@@ -26,9 +27,36 @@ a {
   color: #11999e;
 }
 
-/* .subtitle {
+p {
+  line-height: 2;
+}
+
+hr {
+  border-style: dotted;
+  border: none;
+  width: 5%;
+  border-bottom: 8px dotted #cbebeb;
+  margin: 100px auto;
+}
+
+.profile {
+  margin: 100px auto;
+  width: 30%;
+  text-align: center;
+}
+
+.profile-img {
+  width: 200px;
+}
+
+.profile-description {
+  margin: auto;
+}
+
+h2 {
   font-size: 2.5rem;
-} */
+  font-weight: normal;
+}
 
 .pro {
   text-decoration: underline;
@@ -43,25 +71,95 @@ a {
 .top-cloud {
   position: absolute;
   right: 300px;
-  top: 50px;
+  top: 40px;
 }
 
 .bottom-cloud {
   position: absolute;
-  left: 300px;
+  left: 250px;
   bottom: 300px;
 }
 
-/* .middle-container,
-.bottom-container {
-  height: 200px;
-  width: 200px;
+.skills {
+  text-align: center;
+  margin-top: 100px;
 }
 
-.middle-container {
-  background-color: red;
+.skill-row {
+  margin: 100px auto;
+  width: 50%;
+  text-align: center;
+  display: flex;
+  flex-wrap: row nowrap;
+  justify-content: space-around;
+}
+
+.skill-row--box2 {
+  flex-direction: row-reverse;
+}
+
+.skill-img {
+  max-width: 200px;
+}
+
+.skill--text-box {
+  text-align: left;
+  width: 60%;
+}
+
+.contact-me {
+  text-align: center;
+}
+
+.contact-message {
+  width: 40%;
+  margin: 40px auto 60px;
+}
+
+.myButton {
+  box-shadow: inset 0px 1px 0px 0px #bee2f9;
+  background: linear-gradient(to bottom, #63b8ee 5%, #468ccf 100%);
+  background-color: #63b8ee;
+  border-radius: 8px;
+  border: 1px solid #3866a3;
+  display: inline-block;
+  cursor: pointer;
+  color: #14396a;
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 9px 25px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #7cacde;
+  margin-bottom: 100px;
+}
+.myButton:hover {
+  background: linear-gradient(to bottom, #468ccf 5%, #63b8ee 100%);
+  background-color: #468ccf;
+}
+.myButton:active {
+  position: relative;
+  top: 1px;
 }
 
 .bottom-container {
-  background-color: blue;
-} */
+  text-align: center;
+  background-color: #66bfbf;
+  padding: 50px 0 20px;
+}
+
+.bottom-container a {
+  font-family: "Montserrat", sans-serif;
+  margin: 10px 20px;
+  text-decoration: none;
+}
+
+.bottom-container a:hover {
+  color: #eaf6f6;
+}
+
+.copyright {
+  color: #eaf6f6;
+  font-size: 0.75rem;
+  padding: 20px 0;
+}
