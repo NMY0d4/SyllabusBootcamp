@@ -7,6 +7,12 @@ body {
   font-family: "MontSerrat";
 }
 
+h2 {
+  font-weight: bold;
+  font-size: 3rem;
+  line-height: 1.5;
+}
+
 h3 {
   font-weight: bold;
 }
@@ -79,4 +85,30 @@ p {
 
 .icon:hover {
   color: #ff4c68;
+}
+
+/* Testimonial section */
+
+#testimonials {
+  padding: 7% 15%;
+  text-align: center;
+  background-color: #ef8172;
+  color: white;
+}
+
+.testimonial-img {
+  width: 10%;
+  border-radius: 100%;
+  margin: 2rem;
+}
+
+#press {
+  background-color: #ef8172;
+  text-align: center;
+  padding-bottom: 3%;
+}
+
+.press-logo {
+  width: 15%;
+  margin: 20px 20px 50px;
 }
