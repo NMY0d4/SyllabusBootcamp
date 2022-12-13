@@ -7,6 +7,14 @@ body {
   font-family: "MontSerrat";
 }
 
+h3 {
+  font-weight: bold;
+}
+
+p {
+  color: #8f8f8f;
+}
+
 #title {
   background-color: #ff4c68;
   color: white;
@@ -52,4 +60,23 @@ body {
 
 .title-btn {
   margin: 5% 3% 5% 0;
+}
+
+/* Feature section */
+#features {
+  padding: 7% 15%;
+}
+
+.feature-box {
+  text-align: center;
+  padding: 5%;
+}
+
+.icon {
+  color: #ef8172;
+  margin-bottom: 1rem;
+}
+
+.icon:hover {
+  color: #ff4c68;
 }
