@@ -36,6 +36,17 @@ p {
     line-height: 1.5;
 }
 
+/* Sections  */
+
+.colored-section {
+    background-color: #ff4c68;
+    color: white;
+}
+
+.white-section {
+    background-color: white;
+}
+
 /* Navgation bar --> inside title section */
 
 .container-fluid {
@@ -62,13 +73,8 @@ p {
 
 /* Section title */
 
-#title {
-    background-color: #ff4c68;
-    color: white;
-    text-align: left;
-}
-
 #title .container-fluid {
+    text-align: left;
     padding: 3% 15% 7%;
 }
 
@@ -88,7 +94,6 @@ p {
 /* Feature section */
 
 #features {
-    background-color: white;
     position: relative;
     /* z-index: 1; */
 }
@@ -114,7 +119,6 @@ p {
 
 #testimonials {
     background-color: #ef8172;
-    color: white;
 }
 
 .testimonial-text {
@@ -134,7 +138,6 @@ p {
 
 #press {
     background-color: #ef8172;
-
     padding-bottom: 3%;
 }
 
@@ -169,11 +172,6 @@ p {
 }
 
 /* CTA section */
-
-#cta {
-    background-color: #ff4c68;
-    color: white;
-}
 
 .cta-heading {
     font-family: "Montserrat";
