@@ -200,3 +200,15 @@ p {
         transform: rotate(0);
     }
 }
+
+#testbgimg {
+    padding: 20rem;
+    background-image: url("/images/World_Ends.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#testbgimg h1 {
+    color: paleturquoise;
+}
