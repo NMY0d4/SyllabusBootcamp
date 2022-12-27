@@ -4,11 +4,13 @@ userClickedPattern = [];
 let level = 0;
 let gameStart = false;
 
+// read songs
 const playAudio = (song) => {
     const audio = new Audio(`/sounds/${song}.mp3`);
     audio.play();
 };
 
+// Animation click
 const animatePress = (currentColour) => {
     $(`.${currentColour}`).addClass("pressed");
     setTimeout(() => {
@@ -16,6 +18,7 @@ const animatePress = (currentColour) => {
     }, 100);
 };
 
+//  play runtime
 const nextSequence = () => {
     const colorNbr = Math.floor(Math.random() * 4);
     $("h1").text(`level ${level}`);
