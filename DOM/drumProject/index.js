@@ -1,6 +1,6 @@
 const drumButtons = document.querySelectorAll(".drum");
 
-function handleClick(key) {
+function playSound(key) {
     let sound;
     switch (key) {
         case "d":
@@ -32,12 +32,24 @@ function handleClick(key) {
     audio.play();
 }
 
+const buttonAnimation = (currentKey) => {
+    const activeButton = document.querySelector(`.${currentKey}`);
+
+    // 2 crééer l'animation si c'est une touche correspondante
+    activeButton.classList.add("pressed");
+    setTimeout(() => activeButton.classList.remove("pressed"), 300);
+};
+
 drumButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
-        handleClick(e.target.textContent);
+        const letter = e.target.textContent;
+        playSound(letter);
+        buttonAnimation(letter);
     });
     document.addEventListener("keydown", (e) => {
-        e.key === button.textContent && handleClick(e.key);
+        if (e.key === button.textContent) {
+            playSound(e.key);
+            buttonAnimation(e.key);
+        }
     });
 });
-l;
