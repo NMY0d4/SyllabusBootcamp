@@ -1,11 +1,11 @@
-const NBRCOLOURS = 4;
 const buttonColours = ["red", "blue", "green", "yellow"];
 gamePattern = [];
 userClickedPattern = [];
-const level = 0;
+let level = 0;
+let gameStart = false;
 
-const playAudio = (color) => {
-    const audio = new Audio(`/sounds/${color}.mp3`);
+const playAudio = (song) => {
+    const audio = new Audio(`/sounds/${song}.mp3`);
     audio.play();
 };
 
@@ -16,8 +16,9 @@ const animatePress = (currentColour) => {
     }, 100);
 };
 
-const nextSequence = (nbr) => {
-    const colorNbr = Math.floor(Math.random() * nbr);
+const nextSequence = () => {
+    const colorNbr = Math.floor(Math.random() * 4);
+    $("h1").text(`level ${level}`);
 
     let randomChosenColour = buttonColours[colorNbr];
 
@@ -29,15 +30,45 @@ const nextSequence = (nbr) => {
             playAudio(color);
         }, i * 400);
     });
+
+    $(".btn").on("click", function (e) {
+        const userChosenColour = this.id;
+        userClickedPattern.push(userChosenColour);
+        animatePress(userChosenColour);
+        playAudio(userChosenColour);
+        if (gamePattern.length === userClickedPattern.length) {
+            $(".btn").off("click");
+            if (gamePattern.every((el, i) => userClickedPattern[i] === el)) {
+                level++;
+                setTimeout(nextSequence, 1000);
+                userClickedPattern = [];
+            } else {
+                // gameOver
+                playAudio("wrong");
+                $("h1").text(`Perdu au level ${level}, dommage 😭`);
+                $("body").addClass("game-over");
+
+                setTimeout(() => {
+                    $("body").removeClass("game-over");
+                    gameStart = false;
+                    userClickedPattern = [];
+                    level = 0;
+                    gamePattern = [];
+                    $("h1").text(`Press A Key to Start`);
+                }, 3000);
+            }
+        }
+    });
 };
 
-$(".btn").on("click", function (e) {
-    const userChosenColour = this.id;
-    userClickedPattern.push(userChosenColour);
-    animatePress(userChosenColour);
-    playAudio(userChosenColour);
-});
+const playGame = () => {
+    $("h1").text(`level ${level}`);
+    setTimeout(nextSequence, 1000);
+};
 
 $(this).keypress((e) => {
-    e.key === "a" && nextSequence(NBRCOLOURS);
+    if (e.key === "a" && gameStart === false) {
+        playGame();
+        gameStart = true;
+    }
 });
