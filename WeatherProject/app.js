@@ -1,15 +1,26 @@
 const express = require("express");
 const https = require("https");
 const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
 
 const app = express();
 dotenv.config();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const PORT = process.env.PORT;
-const API_WEARHER_KEY = process.env.API_WEARHER_KEY;
 
 app.get("/", (req, res) => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=Beuzeville&units=metric&appid=${API_WEARHER_KEY}`;
+    res.sendFile(`${__dirname}/index.html`);
+});
+
+app.post("/", (req, res) => {
+    const query = req.body.cityName;
+    const unit = "metric";
+    const API_WEARHER_KEY = process.env.API_WEARHER_KEY;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${
+        query ? query : "Beuzeville"
+    }&units=${unit}&appid=${API_WEARHER_KEY}`;
     https.get(url, (response) => {
         console.log(response.statusCode);
 
