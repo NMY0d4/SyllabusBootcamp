@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const dotenv = require("dotenv");
 const https = require("https");
+const { response } = require("express");
 
 const app = express();
 dotenv.config();
@@ -42,8 +43,12 @@ app.post("/", (req, res) => {
     auth,
   };
 
-  const request = https.request(url, options, (res) => {
-    res.on("data", (data) => {
+  const request = https.request(url, options, (response) => {
+    response.statusCode === 200
+      ? res.send("Successfully subscribed!")
+      : res.send("There was an error with singing up, please try again!");
+
+    response.on("data", (data) => {
       console.log(JSON.parse(data));
     });
   });
