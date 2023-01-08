@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const { getDay: day } = require("./date");
 // const path = require("path");
 
 dotenv.config();
@@ -10,30 +11,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
-let listItems = [];
+let listItems = ["Buy Food"];
+let workItems = [];
 
 app.set("view engine", "ejs");
 
 const PORT = process.env.PORT;
 
 app.get("/", (req, res) => {
-    const today = new Date();
-
-    const options = {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-    };
-
-    let day = today.toLocaleDateString("en-US", options);
-
-    res.render("list", { day, listItems });
+    res.render("list", { listTitle: day(), newListItems: listItems });
 });
 
 app.post("/", (req, res) => {
     const newItem = req.body.newItem;
-    listItems.push(newItem);
-    res.redirect("/");
+
+    if (req.body.list === "Work") {
+        workItems.push(newItem);
+        res.redirect("/work");
+    } else {
+        listItems.push(newItem);
+        res.redirect("/");
+    }
+});
+
+app.get("/work", (req, res) => {
+    res.render("list", { listTitle: "Work", newListItems: workItems });
 });
 
 app.listen(PORT, () => {
