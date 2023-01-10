@@ -24,7 +24,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", { startingContent: homeStartingContent });
+});
+
+app.get("/about", (req, res) => {
+  res.render("about", { startingContent: aboutContent });
+});
+
+app.get("/contact", (req, res) => {
+  res.render("contact", { startingContent: contactContent });
+});
+
+app.get("/compose", (req, res) => {
+  res.render("compose");
 });
 
 app.listen(PORT, function () {
