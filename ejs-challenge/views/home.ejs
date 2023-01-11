@@ -1,14 +1,23 @@
 <%- include("partials/_header") -%>
 
+<% if (error !== "") { %>
+    <h2><%- error %>(post Invalid) </h2> 
+<% } %>
+
 <h1>Home</h1>
 
 <p><%= startingContent %></p>
 
-<% if (posts !== []) { %>
+<% if (homePosts !== []) { %>
 <div>
-    <% posts.forEach(post => { %>
-        <h2><%- post.title %></h2>
-        <p><%- post.content %></p>
+    <% homePosts.forEach(post => { %>
+        <h2><%= post.title %></h2>
+        
+        <p><%= post.content %> <a href="/posts/<%= post.title %>">Read More</a></p>
     <% }) %>
 </div>
-<% } %> <%- include("partials/_footer") -%>
+<% } %>
+
+<a href="/compose">Add a post</a>
+
+<%- include("partials/_footer") -%>
