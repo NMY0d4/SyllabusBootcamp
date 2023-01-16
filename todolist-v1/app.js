@@ -12,34 +12,34 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 mongoose.connection.once("open", () => {
-  console.log("MongoDB Connection ready!");
+    console.log("MongoDB Connection ready!");
 });
 
 mongoose.connect(process.env.MONGODB_URL);
 
 /////////////////////////////////////////////////////////////////
 const itemsSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+    name: {
+        type: String,
+        required: true,
+    },
 });
 
 const Item = mongoose.model("Item", itemsSchema);
 
 const item1 = new Item({
-  name: "maîtriser mongoDB",
+    name: "maîtriser mongoDB",
 });
 
 const item2 = new Item({
-  name: "maîtriser nodeJS",
+    name: "maîtriser nodeJS",
 });
 
 const defaultItems = [item1, item2];
 
 const listSchema = {
-  name: String,
-  items: [itemsSchema],
+    name: String,
+    items: [itemsSchema],
 };
 
 const List = mongoose.model("List", listSchema);
@@ -53,77 +53,93 @@ app.set("view engine", "ejs");
 const PORT = process.env.PORT;
 
 app.get("/", (req, res) => {
-  Item.find({}, (err, foundItems) => {
-    if (foundItems.length === 0) {
-      Item.insertMany(defaultItems, function (err) {
-        if (err) {
-          console.error(err);
+    Item.find({}, (err, foundItems) => {
+        if (foundItems.length === 0) {
+            Item.insertMany(defaultItems, function (err) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log("Successfully saved default items to DB.");
+                }
+            });
+            res.redirect("/");
         } else {
-          console.log("Successfully saved default items to DB.");
+            res.render("list", {
+                listTitle: day(),
+                newListItems: foundItems,
+                errorItem,
+            });
         }
-      });
-      res.redirect("/");
-    } else {
-      res.render("list", {
-        listTitle: day(),
-        newListItems: foundItems,
-        errorItem,
-      });
-    }
-  });
+    });
 });
 
 app.post("/", (req, res) => {
-  errorItem = "";
-  const newItem = req.body.newItem;
-  if (!newItem) {
-    errorItem = "you must enter an item...";
-    return res.redirect("/");
-  }
-  const itemName = req.body.newItem;
-  const item = new Item({ name: itemName });
-  item.save();
-  res.redirect("/");
+    errorItem = "";
+    const newItem = req.body.newItem;
+    const itemName = req.body.newItem;
+    const listName = req.body.list;
+    const item = new Item({ name: itemName });
+
+    if (!newItem) {
+        errorItem = "you must enter an item...";
+        return res.redirect("/");
+    }
+
+    if (listName === day()) {
+        item.save();
+        res.redirect("/");
+    } else {
+        List.findOne({ name: listName }, function (err, foundList) {
+            if (err) {
+                console.error(err);
+            } else {
+                foundList.items.push(item);
+                foundList.save();
+                res.redirect(`/${listName}`);
+            }
+        });
+    }
 });
 
 app.post("/delete", (req, res) => {
-  const checkedItemId = req.body.checkbox;
-  Item.findByIdAndRemove(checkedItemId, function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("item successfully deleted...");
-    }
-    res.redirect("/");
-  });
+    const checkedItemId = req.body.checkbox;
+    Item.findByIdAndRemove(checkedItemId, function (err) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("item successfully deleted...");
+        }
+        res.redirect("/");
+    });
 });
 
 app.get("/:customListName", (req, res) => {
-  const customListName = req.params.customListName;
+    if (req.params.customListName !== "favicon.ico") {
+        const customListName = req.params.customListName;
 
-  List.findOne({ name: customListName }, function (err, foundList) {
-    if (!err) {
-      if (!foundList) {
-        // Create a new list
-        console.log("doesn't exist!");
-      } else {
-        console.log("Exists!");
-      }
+        List.findOne({ name: customListName }, function (err, foundList) {
+            if (!err) {
+                if (!foundList) {
+                    // Create a new list
+                    const list = new List({
+                        name: customListName,
+                        items: defaultItems,
+                    });
+                    list.save();
+                    res.redirect(`/${customListName}`);
+                } else {
+                    //Show an existing list
+                    res.render("list", {
+                        listTitle: foundList.name,
+                        newListItems: foundList.items,
+                        errorItem,
+                    });
+                }
+            }
+        });
     }
-  });
-
-  const list = new List({
-    name: customListName,
-    items: defaultItems,
-  });
-  list.save();
-  res.render("list", {
-    listTitle: customListName,
-    newListItems: [],
-    errorItem,
-  });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}...`);
+    console.log(`Server started on port ${PORT}...`);
 });
