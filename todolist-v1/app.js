@@ -37,8 +37,8 @@ const item2 = new Item({
 
 const defaultItems = [item1, item2];
 
-defaultItems.forEach(async (item) => await item.save());
 ///////////////////////////////////////////////////////////////////
+
 let errorItem = "";
 
 app.set("view engine", "ejs");
@@ -46,7 +46,24 @@ app.set("view engine", "ejs");
 const PORT = process.env.PORT;
 
 app.get("/", (req, res) => {
-  res.render("list", { listTitle: day(), newListItems: listItems, errorItem });
+  Item.find({}, (err, foundItems) => {
+    if (foundItems.length === 0) {
+      Item.insertMany(defaultItems, function (err) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("Successfully saved default items to DB.");
+        }
+      });
+      res.redirect("/");
+    } else {
+      res.render("list", {
+        listTitle: day(),
+        newListItems: foundItems,
+        errorItem,
+      });
+    }
+  });
 });
 
 app.post("/", (req, res) => {
@@ -56,18 +73,26 @@ app.post("/", (req, res) => {
     errorItem = "you must enter an item...";
     return res.redirect("/");
   }
+  const itemName = req.body.newItem;
+  const item = new Item({ name: itemName });
+  item.save();
+  res.redirect("/");
+});
 
-  if (req.body.list === "Work") {
-    workItems.push(newItem);
-    res.redirect("/work");
-  } else {
-    listItems.push(newItem);
+app.post("/delete", (req, res) => {
+  const checkedItemId = req.body.checkbox;
+  Item.findByIdAndRemove(checkedItemId, function (err) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("item successfully deleted...");
+    }
     res.redirect("/");
-  }
+  });
 });
 
 app.get("/work", (req, res) => {
-  res.render("list", { listTitle: "Work", newListItems: workItems, errorItem });
+  res.render("list", { listTitle: "Work", errorItem });
 });
 
 app.listen(PORT, () => {
