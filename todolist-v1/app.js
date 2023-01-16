@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const { getDate: day } = require("./date");
 // const path = require("path");
@@ -8,11 +9,36 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.static("public"));
 
-let listItems = ["Buy Food"];
-let workItems = [];
+mongoose.connection.once("open", () => {
+  console.log("MongoDB Connection ready!");
+});
+
+mongoose.connect(process.env.MONGODB_URL);
+
+/////////////////////////////////////////////////////////////////
+const itemsSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+});
+
+const Item = mongoose.model("Item", itemsSchema);
+
+const item1 = new Item({
+  name: "maîtriser mongoDB",
+});
+
+const item2 = new Item({
+  name: "maîtriser nodeJS",
+});
+
+const defaultItems = [item1, item2];
+
+defaultItems.forEach(async (item) => await item.save());
+///////////////////////////////////////////////////////////////////
 let errorItem = "";
 
 app.set("view engine", "ejs");
