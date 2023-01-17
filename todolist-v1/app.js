@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const { getDate: day } = require("./date");
+const _ = require("lodash");
 const { Template } = require("ejs");
 // const path = require("path");
 
@@ -47,8 +48,6 @@ const List = mongoose.model("List", listSchema);
 
 ///////////////////////////////////////////////////////////////////
 
-let errorItem = "";
-
 app.set("view engine", "ejs");
 
 const PORT = process.env.PORT;
@@ -69,7 +68,6 @@ app.get("/", (req, res) => {
       res.render("list", {
         listTitle: day(),
         newListItems: foundItems,
-        errorItem,
       });
     }
   });
@@ -80,11 +78,6 @@ app.post("/", (req, res) => {
   const itemName = req.body.newItem;
   const listName = req.body.list;
   const item = new Item({ name: itemName });
-
-  if (!newItem) {
-    errorItem = "you must enter an item...";
-    return res.redirect("/");
-  }
 
   if (listName === day()) {
     item
@@ -147,7 +140,7 @@ app.post("/delete", (req, res) => {
 
 app.get("/:customListName", (req, res) => {
   if (req.params.customListName !== "favicon.ico") {
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
 
     List.findOne({ name: customListName }, function (err, foundList) {
       if (!err) {
@@ -164,7 +157,6 @@ app.get("/:customListName", (req, res) => {
           res.render("list", {
             listTitle: foundList.name,
             newListItems: foundList.items,
-            errorItem,
           });
         }
       }
