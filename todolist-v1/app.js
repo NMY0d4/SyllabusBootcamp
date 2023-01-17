@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const { getDate: day } = require("./date");
+const { Template } = require("ejs");
 // const path = require("path");
 
 dotenv.config();
@@ -22,7 +23,6 @@ const itemsSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
 });
 
@@ -91,18 +91,26 @@ app.post("/", (req, res) => {
       .save()
       .then(() => {
         console.log("Successfully saved default items to DB.");
+        res.redirect("/");
       })
       .catch((err) => {
-        return (errorItem = `Err${err.code}: Item already existing...`);
+        // return (errorItem = `Err${err.code}: Item already existing...`);
+        console.error(err);
       });
-    res.redirect("/");
   } else {
     List.findOne({ name: listName }, function (err, foundList) {
       if (err) {
         console.error(err);
       } else {
         foundList.items.push(item);
-        foundList.save();
+        foundList
+          .save()
+          .then(() => {
+            console.log(`${foundList.name} updated!`);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
         res.redirect(`/${listName}`);
       }
     });
@@ -111,14 +119,30 @@ app.post("/", (req, res) => {
 
 app.post("/delete", (req, res) => {
   const checkedItemId = req.body.checkbox;
-  Item.findByIdAndRemove(checkedItemId, function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("item successfully deleted...");
-    }
-    res.redirect("/");
-  });
+  const listName = req.body.listName;
+
+  if (listName === day()) {
+    Item.findByIdAndRemove(checkedItemId, function (err) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("item successfully deleted...");
+      }
+      res.redirect("/");
+    });
+  } else {
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemId } } }
+    )
+      .then((foundList) => {
+        console.log(`item deleted from ${foundList.name}`);
+        res.redirect(`/${listName}`);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 });
 
 app.get("/:customListName", (req, res) => {
@@ -131,7 +155,7 @@ app.get("/:customListName", (req, res) => {
           // Create a new list
           const list = new List({
             name: customListName,
-            items: defaultItems,
+            items: [],
           });
           list.save();
           res.redirect(`/${customListName}`);
