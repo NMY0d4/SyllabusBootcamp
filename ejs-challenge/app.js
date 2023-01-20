@@ -1,13 +1,15 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
+const Post = require("./model/post.model");
+const { mongoConnect } = require("./services/mongo");
+
 const ejs = require("ejs");
 const _ = require("lodash");
 
-dotenv.config();
-
 const PORT = process.env.PORT;
-const posts = [];
+let homePosts = [];
+
 let error = "";
 
 const homeStartingContent =
@@ -26,15 +28,19 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-    // build new array with the content cut
-    const homePosts = posts.map((post) => {
-        return {
-            title: post.title,
-            content: _.truncate(post.content, { length: 100 }),
-        };
-    });
-
+app.get("/", async (req, res) => {
+    try {
+        const posts = await Post.find({});
+        // build new array with the content cut
+        homePosts = posts.map((post) => {
+            return {
+                title: post.title,
+                content: _.truncate(post.content, { length: 100 }),
+            };
+        });
+    } catch (err) {
+        error = err.message;
+    }
     res.render("home", {
         startingContent: homeStartingContent,
         homePosts,
@@ -55,27 +61,27 @@ app.get("/compose", (req, res) => {
     res.render("compose");
 });
 
-app.post("/compose", (req, res) => {
-    const post = ({ title, content } = req.body);
-
-    posts.push(post);
-
+app.post("/compose", async (req, res) => {
+    try {
+        const { title, content } = req.body;
+        const post = await Post.create({ title, content });
+    } catch (err) {
+        error = err.message;
+    }
     res.redirect("/");
 });
 
-app.get("/posts/:title", (req, res) => {
-    const postFound = posts.filter(
-        (post) => _.lowerCase(req.params.title) === _.lowerCase(post.title)
-    );
-
-    if (postFound[0]) {
-        res.render("post", { post: postFound[0] });
-    } else {
-        error = "404 Not found";
-        res.redirect("/");
+app.get("/posts/:title", async (req, res) => {
+    try {
+        const postFound = await Post.findOne({ title: req.params.title });
+        return res.render("post", { post: postFound });
+    } catch (err) {
+        error = err.message;
+        return res.redirect("/");
     }
-    // res.render("post");
 });
+
+mongoConnect();
 
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
