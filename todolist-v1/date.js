@@ -1,23 +1,18 @@
-const getDate = () => {
+const getDate = (option) => {
     const today = new Date();
-
-    const options = {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-    };
-
-    return today.toLocaleDateString("en-US", options);
+    if (option === "day") {
+        const options = {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+        };
+        return today.toLocaleDateString("en-US", options);
+    } else if (option === "today") {
+        const options = {
+            weekday: "long",
+        };
+        return today.toLocaleDateString("en-US", options);
+    }
 };
 
-const getDay = () => {
-    const day = new Date();
-
-    const options = {
-        weekday: "long",
-    };
-
-    return day.toLocaleDateString("en-US", options);
-};
-
-module.exports = { getDate, getDay };
+module.exports = { getDate };
