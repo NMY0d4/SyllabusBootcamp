@@ -34,6 +34,7 @@ app.get("/", async (req, res) => {
         // build new array with the content cut
         homePosts = posts.map((post) => {
             return {
+                id: post._id,
                 title: post.title,
                 content: _.truncate(post.content, { length: 100 }),
             };
@@ -71,9 +72,9 @@ app.post("/compose", async (req, res) => {
     res.redirect("/");
 });
 
-app.get("/posts/:title", async (req, res) => {
+app.get("/posts/:id", async (req, res) => {
     try {
-        const postFound = await Post.findOne({ title: req.params.title });
+        const postFound = await Post.findOne({ _id: req.params.id });
         return res.render("post", { post: postFound });
     } catch (err) {
         error = err.message;
