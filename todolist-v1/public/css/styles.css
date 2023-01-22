@@ -115,6 +115,7 @@ form.item {
 
 button {
     min-height: 50px;
+    margin-left: 0.5rem;
     width: 50px;
     border-radius: 50%;
     border-color: transparent;
@@ -138,6 +139,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     outline: none;
+
     box-shadow: inset 0 -3px 0 0 var(--color-primary-light);
 }
 
@@ -155,5 +157,6 @@ footer {
 
 .error {
     color: darkred;
-    font-size: 15px;
+    font-size: 1rem;
+    padding: 0.5rem;
 }

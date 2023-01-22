@@ -16,10 +16,11 @@ const homeTodo = function (req, res) {
 
 const addTask = function (req, res) {
     // const newTask = req.body.newItem;
+    error = "";
     const taskName = req.body.newItem;
     const listName = req.body.list;
     if (!taskName) {
-        error = "Vous devez entrer une tâche avant de valider";
+        error = "Entrez une tâche avant de valider";
         return res.redirect("/todo");
     }
     const task = new Task({ name: taskName });
@@ -52,4 +53,61 @@ const addTask = function (req, res) {
     }
 };
 
-module.exports = { homeTodo, addTask };
+const deleteTask = function (req, res) {
+    const checkedItemId = req.body.checkbox;
+    const listName = req.body.listName;
+
+    if (listName === getDate(process.env.DAY)) {
+        Task.findByIdAndRemove(checkedItemId, function (err) {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("item successfully deleted...");
+            }
+            res.redirect("/todo");
+        });
+    } else {
+        List.findOneAndUpdate(
+            { name: listName },
+            { $pull: { items: { _id: checkedItemId } } }
+        )
+            .then((foundList) => {
+                console.log(`item deleted from ${foundList.name}`);
+                res.redirect(`/${listName}`);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+};
+
+const customList = function (req, res) {
+    if (
+        req.params.customListName !== "favicon.ico" &&
+        req.params.customListName !== "todo"
+    ) {
+        const customListName = _.capitalize(req.params.customListName);
+
+        List.findOne({ name: customListName }, function (err, foundList) {
+            if (!err) {
+                if (!foundList) {
+                    // Create a new list
+                    const list = new List({
+                        name: customListName,
+                        items: [],
+                    });
+                    list.save();
+                    res.redirect(`/${customListName}`);
+                } else {
+                    //Show an existing list
+                    res.render("list", {
+                        listTitle: foundList.name,
+                        newListItems: foundList.items,
+                    });
+                }
+            }
+        });
+    }
+};
+
+module.exports = { homeTodo, addTask, deleteTask };

@@ -6,12 +6,12 @@ const getDate = (option) => {
             day: "numeric",
             month: "long",
         };
-        return today.toLocaleDateString("en-US", options);
+        return today.toLocaleDateString("fr-FR", options);
     } else if (option === "today") {
         const options = {
             weekday: "long",
         };
-        return today.toLocaleDateString("en-US", options);
+        return today.toLocaleDateString("fr-FR", options);
     }
 };
 
