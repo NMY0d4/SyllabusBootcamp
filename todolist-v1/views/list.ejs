@@ -1,9 +1,8 @@
-<%- include("header") -%>
+<%- include("./partials/_header.ejs") -%>
 
 <div class="box" id="heading">
     <h1><%= listTitle %></h1>
 </div>
-
 <div class="box">
     <% newListItems.forEach(item => { %>
     <form action="/delete" method="post">
@@ -30,11 +29,12 @@
                 placeholder="add a task"
                 autocomplete="off"
             />
-            <!-- <div class="error"></div> -->
+            <div class="error"><%= error %></div>
         </div>
         <!-- prettier-ignore -->
         <button type="submit" name="list" value="<%= listTitle %>">+</button>
     </form>
 </div>
+<a href="/">Retour home</a>
 
-<%- include("footer") -%>
+<%- include("./partials/_footer.ejs") -%>

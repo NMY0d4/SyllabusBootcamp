@@ -41,49 +41,46 @@ const PORT = process.env.PORT;
 app.use("/todo", todo);
 
 app.get("/", (req, res) => {
-    Item.find({}, (err, foundItems) => {
-        res.render("list", {
-            listTitle: getDate(process.env.DAY),
-            newListItems: foundItems,
-        });
+    res.render("home", {
+        date: getDate(process.env.DAY),
     });
 });
 
-app.post("/", (req, res) => {
-    // const newItem = req.body.newItem;
-    const itemName = req.body.newItem;
-    const listName = req.body.list;
-    const item = new Item({ name: itemName });
+// app.post("/", (req, res) => {
+//     // const newItem = req.body.newItem;
+//     const itemName = req.body.newItem;
+//     const listName = req.body.list;
+//     const item = new Item({ name: itemName });
 
-    if (listName === getDate(process.env.DAY)) {
-        item.save()
-            .then(() => {
-                console.log("Successfully saved default items to DB.");
-                res.redirect("/");
-            })
-            .catch((err) => {
-                // return (errorItem = `Err${err.code}: Item already existing...`);
-                console.error(err);
-            });
-    } else {
-        List.findOne({ name: listName }, function (err, foundList) {
-            if (err) {
-                console.error(err);
-            } else {
-                foundList.items.push(item);
-                foundList
-                    .save()
-                    .then(() => {
-                        console.log(`${foundList.name} updated!`);
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
-                res.redirect(`/${listName}`);
-            }
-        });
-    }
-});
+//     if (listName === getDate(process.env.DAY)) {
+//         item.save()
+//             .then(() => {
+//                 console.log("Successfully saved default items to DB.");
+//                 res.redirect("/");
+//             })
+//             .catch((err) => {
+//                 // return (errorItem = `Err${err.code}: Item already existing...`);
+//                 console.error(err);
+//             });
+//     } else {
+//         List.findOne({ name: listName }, function (err, foundList) {
+//             if (err) {
+//                 console.error(err);
+//             } else {
+//                 foundList.items.push(item);
+//                 foundList
+//                     .save()
+//                     .then(() => {
+//                         console.log(`${foundList.name} updated!`);
+//                     })
+//                     .catch((err) => {
+//                         console.error(err);
+//                     });
+//                 res.redirect(`/${listName}`);
+//             }
+//         });
+//     }
+// });
 
 app.post("/delete", (req, res) => {
     const checkedItemId = req.body.checkbox;
