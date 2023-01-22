@@ -5,7 +5,7 @@
 </div>
 <div class="box">
     <% newListItems.forEach(item => { %>
-    <form action="todo/delete" method="post">
+    <form action="/todo/delete" method="post">
         <div class="item">
             <input
                 type="checkbox"
@@ -35,6 +35,9 @@
         <button type="submit" name="list" value="<%= listTitle %>">+</button>
     </form>
 </div>
-<a href="/">Retour home</a>
+<div class="col-wrap">
+    <a href="/">Retour home</a>
+    <a href="">Ajouter une liste</a>
+</div>
 
 <%- include("./partials/_footer.ejs") -%>

@@ -1,5 +1,7 @@
 require("dotenv").config();
 const Task = require("../models/tasks.model");
+const _ = require("lodash");
+const List = require("../models/lists.model");
 const { getDate } = require("../services/date");
 
 let error = "";
@@ -73,7 +75,7 @@ const deleteTask = function (req, res) {
         )
             .then((foundList) => {
                 console.log(`item deleted from ${foundList.name}`);
-                res.redirect(`/${listName}`);
+                res.redirect(`todo/${listName}`);
             })
             .catch((err) => {
                 console.error(err);
@@ -92,17 +94,18 @@ const customList = function (req, res) {
             if (!err) {
                 if (!foundList) {
                     // Create a new list
-                    const list = new List({
+                    List.create({
                         name: customListName,
                         items: [],
                     });
-                    list.save();
-                    res.redirect(`/${customListName}`);
+
+                    res.redirect(`/todo/${customListName}`);
                 } else {
                     //Show an existing list
                     res.render("list", {
                         listTitle: foundList.name,
                         newListItems: foundList.items,
+                        error,
                     });
                 }
             }
@@ -110,4 +113,4 @@ const customList = function (req, res) {
     }
 };
 
-module.exports = { homeTodo, addTask, deleteTask };
+module.exports = { homeTodo, addTask, deleteTask, customList };
