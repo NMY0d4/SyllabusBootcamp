@@ -1,40 +1,40 @@
 <%- include("header") -%>
 
 <div class="box" id="heading">
-  <h1><%= listTitle %></h1>
+    <h1><%= listTitle %></h1>
 </div>
 
 <div class="box">
-  <% newListItems.forEach(item => { %>
-  <form action="/delete" method="post">
-    <div class="item">
-      <input
-        type="checkbox"
-        name="checkbox"
-        value="<%= item._id %>"
-        onChange="this.form.submit()"
-      />
-      <p><%= item.name %></p>
-    </div>
-    <input type="hidden" name="listName" value="<%= listTitle %>" />
-  </form>
-  <% }) %>
+    <% newListItems.forEach(item => { %>
+    <form action="/delete" method="post">
+        <div class="item">
+            <input
+                type="checkbox"
+                name="checkbox"
+                value="<%= item._id %>"
+                onChange="this.form.submit()"
+            />
+            <p><%= item.name %></p>
+        </div>
+        <input type="hidden" name="listName" value="<%= listTitle %>" />
+    </form>
+    <% }) %>
 
-  <!-- Add a TASK -->
-  <form class="item" action="/" method="post">
-    <div class="input-container">
-      <input
-        id="task"
-        name="newItem"
-        type="text"
-        placeholder="add a task"
-        autocomplete="off"
-      />
-      <!-- <div class="error"></div> -->
-    </div>
-    <!-- prettier-ignore -->
-    <button type="submit" name="list" value="<%= listTitle %>">+</button>
-  </form>
+    <!-- Add a TASK -->
+    <form class="item" action="/todo" method="post">
+        <div class="input-container">
+            <input
+                id="task"
+                name="newItem"
+                type="text"
+                placeholder="add a task"
+                autocomplete="off"
+            />
+            <!-- <div class="error"></div> -->
+        </div>
+        <!-- prettier-ignore -->
+        <button type="submit" name="list" value="<%= listTitle %>">+</button>
+    </form>
 </div>
 
 <%- include("footer") -%>

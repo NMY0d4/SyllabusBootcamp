@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { getDate } = require("./date");
+const { getDate } = require("./services/date");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -13,7 +13,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const DAY = "day";
 /////////////////////////////////////////////////////////////////
 const itemsSchema = new mongoose.Schema({
     name: {
@@ -23,16 +22,8 @@ const itemsSchema = new mongoose.Schema({
 });
 
 const Item = mongoose.model("Item", itemsSchema);
-
-const item1 = new Item({
-    name: "maîtriser mongoDB",
-});
-
-const item2 = new Item({
-    name: "maîtriser nodeJS",
-});
-
-const defaultItems = [item1, item2];
+/////// ******************************************************** ///////
+/////// ******************************************************** ///////
 
 const listSchema = {
     name: String,
@@ -51,32 +42,20 @@ app.use("/todo", todo);
 
 app.get("/", (req, res) => {
     Item.find({}, (err, foundItems) => {
-        if (foundItems.length === 0) {
-            Item.insertMany(defaultItems)
-                .then(() => {
-                    console.log("Successfully saved default items to DB.");
-                })
-                .catch((err) => {
-                    errorItem = err.message;
-                    res.redirect("/");
-                });
-            res.redirect("/");
-        } else {
-            res.render("list", {
-                listTitle: getDate(DAY),
-                newListItems: foundItems,
-            });
-        }
+        res.render("list", {
+            listTitle: getDate(process.env.DAY),
+            newListItems: foundItems,
+        });
     });
 });
 
 app.post("/", (req, res) => {
-    const newItem = req.body.newItem;
+    // const newItem = req.body.newItem;
     const itemName = req.body.newItem;
     const listName = req.body.list;
     const item = new Item({ name: itemName });
 
-    if (listName === getDate(DAY)) {
+    if (listName === getDate(process.env.DAY)) {
         item.save()
             .then(() => {
                 console.log("Successfully saved default items to DB.");
@@ -110,7 +89,7 @@ app.post("/delete", (req, res) => {
     const checkedItemId = req.body.checkbox;
     const listName = req.body.listName;
 
-    if (listName === getDate(DAY)) {
+    if (listName === getDate(process.env.DAY)) {
         Item.findByIdAndRemove(checkedItemId, function (err) {
             if (err) {
                 console.error(err);

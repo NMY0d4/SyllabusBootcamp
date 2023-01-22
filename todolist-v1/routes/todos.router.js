@@ -1,12 +1,12 @@
 const express = require("express");
 
-const { accueilTodo } = require("./todos.controller");
+const { homeTodo, addTask } = require("./todos.controller");
 
 const todoRouter = express.Router();
 
-todoRouter.get("/", accueilTodo);
+todoRouter.get("/", homeTodo);
 todoRouter.get("/:customListName");
-todoRouter.post("/");
+todoRouter.post("/", addTask);
 todoRouter.delete("/");
 
 module.exports = todoRouter;
