@@ -9,9 +9,9 @@ const {
 
 const todoRouter = express.Router();
 
-todoRouter.get("/", homeTodo);
-todoRouter.get("/:customListName", customList);
-todoRouter.post("/", addTask);
-todoRouter.post("/delete", deleteTask);
+todoRouter.route("/").get(homeTodo);
+todoRouter.route("/:customListName").get(customList);
+todoRouter.route("/").post(addTask);
+todoRouter.route("/delete").post(deleteTask);
 
 module.exports = todoRouter;
