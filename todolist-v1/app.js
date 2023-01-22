@@ -1,21 +1,17 @@
 require("dotenv").config();
+const { getDate } = require("./date");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const { getDate } = require("./date");
 const _ = require("lodash");
 const { Template } = require("ejs");
+const todo = require("./routes/todos.router");
+require("./services/mongo").mongoConnect();
 // const path = require("path");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
-mongoose.connection.once("open", () => {
-    console.log("MongoDB Connection ready!");
-});
-
-mongoose.connect(process.env.MONGODB_URL);
 
 const DAY = "day";
 /////////////////////////////////////////////////////////////////
@@ -50,6 +46,8 @@ const List = mongoose.model("List", listSchema);
 app.set("view engine", "ejs");
 
 const PORT = process.env.PORT;
+
+app.use("/todo", todo);
 
 app.get("/", (req, res) => {
     Item.find({}, (err, foundItems) => {
@@ -137,7 +135,10 @@ app.post("/delete", (req, res) => {
 });
 
 app.get("/:customListName", (req, res) => {
-    if (req.params.customListName !== "favicon.ico") {
+    if (
+        req.params.customListName !== "favicon.ico" &&
+        req.params.customListName !== "todo"
+    ) {
         const customListName = _.capitalize(req.params.customListName);
 
         List.findOne({ name: customListName }, function (err, foundList) {
