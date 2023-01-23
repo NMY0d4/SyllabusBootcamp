@@ -1,0 +1,21 @@
+html {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 99vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.page-wrap {
+  text-align: center;
+}
+
+footer {
+  color: darkslategrey;
+
+  text-align: center;
+  margin: 2rem;
+}
