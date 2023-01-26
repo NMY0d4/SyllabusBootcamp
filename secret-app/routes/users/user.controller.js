@@ -1,9 +1,14 @@
 const User = require("../../models/users.model");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 exports.registerUser = async (req, res, next) => {
   try {
-    await User.create(req.body);
-
+    bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
+      const email = req.body.email;
+      const password = hash;
+      await User.create({ email, password });
+    });
     res.render("secrets");
   } catch (err) {
     console.error(err.message);
@@ -16,7 +21,9 @@ exports.loginUser = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email: userEmail });
-    user.password === password && res.render("secrets");
+    bcrypt.compare(password, user.password, function (err, result) {
+      result && res.render("secrets");
+    });
   } catch (err) {
     console.error(err.message);
   }
