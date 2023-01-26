@@ -6,6 +6,7 @@ const { Template } = require("ejs");
 require("./services/mongo").mongoConnect();
 const path = require("path");
 const articlesRouter = require("./routes/articles/article.router");
+const viewRouter = require("./routes/views/view.router");
 
 const app = express();
 
@@ -22,10 +23,16 @@ const PORT = process.env.PORT;
 
 app.use("/articles", articlesRouter);
 
-app.get("/", (req, res) => {
-    res.render("home", {});
+app.use("/", viewRouter);
+// app.get("/", (req, res) => {
+//     res.render("home", {});
+// });
+
+// Send an error msg if no route
+app.all("*", (req, res, next) => {
+  next(new Error(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}...`);
+  console.log(`Server started on port ${PORT}...`);
 });

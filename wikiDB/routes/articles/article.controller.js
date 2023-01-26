@@ -37,7 +37,7 @@ const getOneArticle = async (req, res) => {
   }
 };
 
-const addOneArticle = async (req, res, next) => {
+const addOneArticle = async (req, res) => {
   try {
     const newArticle = await Article.create(req.body);
     res.status(201).json({
@@ -52,7 +52,31 @@ const addOneArticle = async (req, res, next) => {
       message: "invalid data sent!",
     });
   }
-  next();
+};
+
+const updateOneArticle = async (req, res) => {
+  try {
+    const doc = await Article.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      throw new Error("No document found with that ID", 404);
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        data: doc,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };
 
 const deleteAllArticles = async (req, res) => {
@@ -89,6 +113,7 @@ module.exports = {
   getAllArticles,
   getOneArticle,
   addOneArticle,
+  updateOneArticle,
   deleteAllArticles,
   deleteOneArticle,
 };
