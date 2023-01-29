@@ -14,48 +14,48 @@ const homeTodo = async function (req, res) {
             newListItems: tasks,
             error,
         });
+        error = "";
     } catch (err) {
-        throw new Error(err);
+        console.error(`ICI -> ${err}`);
     }
 };
 
-const addTask = function (req, res, next) {
+const addTask = async function (req, res, next) {
     // const newTask = req.body.newItem;
     error = "";
+
     const taskName = req.body.newItem;
     const listName = req.body.list;
     if (!taskName) {
         error = "Entrez une tâche avant de valider";
         return res.redirect("/todo");
     }
-    const task = new Task({ name: taskName });
+    const task = await new Task({ name: taskName });
 
     if (listName === getDate(process.env.DAY)) {
         try {
-            task.save();
+            await task.save();
             console.log("Successfully saved default task to DB.");
             return res.redirect("/todo");
         } catch (err) {
-            throw new Error(err);
-            // console.error(`ICI -> ${err}`);
+            console.error(`ICI -> ${err}`);
         }
     } else {
-        List.findOne({ name: listName }, function (err, foundList) {
-            if (err) {
-                console.error(err);
-            } else {
-                foundList.items.push(task);
-                foundList
-                    .save()
-                    .then(() => {
-                        console.log(`${foundList.name} updated!`);
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
-                res.redirect(`/${listName}`);
-            }
-        });
+        try {
+            const foundList = await List.findOne({ name: listName });
+            foundList.items.push(task);
+            await foundList.save();
+
+            console.log(`${foundList.name} updated!`);
+
+            res.render("list", {
+                listTitle: foundList.name,
+                newListItems: foundList.items,
+                error,
+            });
+        } catch (err) {
+            console.error(`ICI -> ${err}`);
+        }
     }
 };
 
@@ -79,7 +79,7 @@ const deleteTask = function (req, res) {
         )
             .then((foundList) => {
                 console.log(`item deleted from ${foundList.name}`);
-                res.redirect(`todo/${listName}`);
+                res.redirect(`/todo/${listName}`);
             })
             .catch((err) => {
                 console.error(err);
@@ -87,34 +87,51 @@ const deleteTask = function (req, res) {
     }
 };
 
-const customList = function (req, res) {
-    if (
-        req.params.customListName !== "favicon.ico" &&
-        req.params.customListName !== "todo"
-    ) {
-        const customListName = _.capitalize(req.params.customListName);
+const customList = async function (req, res) {
+    let newList = req.query.newListName;
 
-        List.findOne({ name: customListName }, function (err, foundList) {
-            if (!err) {
-                if (!foundList) {
-                    // Create a new list
-                    List.create({
-                        name: customListName,
-                        items: [],
-                    });
+    // if (
+    //     req.params.customListName !== "favicon.ico" &&
+    //     req.params.customListName !== "todo"
+    // ) {
+    newList = _.capitalize(newList);
 
-                    res.redirect(`/todo/${customListName}`);
-                } else {
-                    //Show an existing list
-                    res.render("list", {
-                        listTitle: foundList.name,
-                        newListItems: foundList.items,
-                        error,
-                    });
-                }
-            }
-        });
+    try {
+        const existingList = await List.findOne({ name: newList });
+
+        if (existingList) {
+            error = "cette liste existe déjà...";
+            res.render("list", {
+                listTitle: existingList.name,
+                newListItems: existingList.items,
+                error,
+            });
+        }
+
+        //  function (err, foundList) {
+        //     if (!err) {
+        //         if (!foundList) {
+        //             // Create a new list
+        //             List.create({
+        //                 name: customListName,
+        //                 items: [],
+        //             });
+
+        //             res.redirect(`/todo/${customListName}`);
+        //         } else {
+        //             //Show an existing list
+        //             res.render("list", {
+        //                 listTitle: foundList.name,
+        //                 newListItems: foundList.items,
+        //                 error,
+        //             });
+        //         }
+        //     }
+        // });
+    } catch (err) {
+        console.error(err);
     }
+    // }
 };
 
 module.exports = { homeTodo, addTask, deleteTask, customList };

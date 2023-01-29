@@ -4,7 +4,8 @@
     <h1><%= listTitle %></h1>
 </div>
 <div class="box">
-    <% newListItems.forEach(item => { %>
+    <% newListItems && newListItems.forEach(item => { %>
+    <!-- DELETING AN ELEMENT IN A LIST -->
     <form action="/todo/delete" method="post">
         <div class="item">
             <input
@@ -19,7 +20,7 @@
     </form>
     <% }) %>
 
-    <!-- Add a TASK -->
+    <!-- -------------- Add A TASK ------------------------ -->
     <form class="item" action="/todo" method="post">
         <div class="input-container">
             <input
@@ -35,29 +36,25 @@
         <button class="add-button" type="submit" name="list" value="<%= listTitle %>">+</button>
     </form>
 </div>
+
+<!-- --------------------- AFTER LIST ---------------------------------------- -->
 <div class="col-wrap">
     <a href="/">Retour home</a>
-    <!-- Modal pour la création de liste -->
+
+    <!------------- Modal pour la création de liste ----------------------- -->
     <button class="show-modal">Ajouter une liste</button>
     <div class="modal hidden">
         <button class="modal__close-modal close-modal">&times;</button>
         <h1 class="modal__tile">Choississez un nom de liste</h1>
-        <form action="" method="get">
+        <form action="/todo/add-new-list" method="get">
             <input
                 class="modal--input"
                 type="text"
-                name="listName"
+                name="newListName"
                 placeholder="Votre nom de liste"
                 autocomplete="off"
             />
-            <button
-                class="add-button"
-                type="submit"
-                name="list"
-                value="<%= listTitle %>"
-            >
-                +
-            </button>
+            <button class="add-button" type="submit">+</button>
         </form>
     </div>
     <div class="overlay hidden"></div>

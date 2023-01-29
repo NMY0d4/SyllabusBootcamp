@@ -1,14 +1,10 @@
 const mongoose = require("mongoose");
+const Task = require("./tasks.model");
 
-const listSchema = {
+const listSchema = new mongoose.Schema({
     name: String,
-    items: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: "Task",
-        },
-    ],
-};
+    items: [Task.schema],
+});
 
 const List = mongoose.model("List", listSchema);
 
