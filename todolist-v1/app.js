@@ -10,30 +10,11 @@ require("./services/mongo").mongoConnect();
 const path = require("path");
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 
-/////////////////////////////////////////////////////////////////
-// const itemsSchema = new mongoose.Schema({
-//     name: {
-//         type: String,
-//         required: true,
-//     },
-// });
-
-// const Item = mongoose.model("Item", itemsSchema);
-// /////// ******************************************************** ///////
-// /////// ******************************************************** ///////
-
-// const listSchema = {
-//     name: String,
-//     items: [itemsSchema],
-// };
-
-// const List = mongoose.model("List", listSchema);
-
-///////////////////////////////////////////////////////////////////
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
