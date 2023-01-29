@@ -32,12 +32,44 @@
             <div class="error"><%= error %></div>
         </div>
         <!-- prettier-ignore -->
-        <button type="submit" name="list" value="<%= listTitle %>">+</button>
+        <button class="add-button" type="submit" name="list" value="<%= listTitle %>">+</button>
     </form>
 </div>
 <div class="col-wrap">
     <a href="/">Retour home</a>
-    <a href="">Ajouter une liste</a>
+    <!-- Modal pour la création de liste -->
+    <button class="show-modal">Ajouter une liste</button>
+    <div class="modal hidden">
+        <button class="modal__close-modal close-modal">&times;</button>
+        <h1 class="modal__tile">Choississez un nom de liste</h1>
+        <form action="" method="get">
+            <input
+                class="modal--input"
+                type="text"
+                name="listName"
+                placeholder="Votre nom de liste"
+                autocomplete="off"
+            />
+            <button
+                class="add-button"
+                type="submit"
+                name="list"
+                value="<%= listTitle %>"
+            >
+                +
+            </button>
+        </form>
+    </div>
+    <div class="overlay hidden"></div>
+    <!-- Créer un modal pour ajouter une liste
+
+        1// faire fonctionner le modal (style améliorer plus tard)
+
+        2// y intégrer un input pour création d'une liste
+
+        3// faire créer les listes à partir de ce modal
+
+    -->
 </div>
 
 <%- include("./partials/_footer.ejs") -%>

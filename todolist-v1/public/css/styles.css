@@ -96,7 +96,7 @@ form.item {
   text-align: center;
   margin-left: 20px; }
 
-button {
+.add-button {
   min-height: 50px;
   margin-left: 0.5rem;
   width: 50px;
@@ -136,3 +136,40 @@ footer {
   color: darkred;
   font-size: 1rem;
   padding: 0.5rem; }
+
+.show-modal {
+  width: 15rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 1rem auto;
+  color: var(--color-Grey-light-1);
+  background-color: var(--color-primary-dark); }
+
+.hidden {
+  display: none; }
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  background-color: var(--color-secondary-light);
+  padding: 3rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10; }
+  .modal form .modal--input {
+    background-color: var(--color-Grey-light-1); }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-blur: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 9; }

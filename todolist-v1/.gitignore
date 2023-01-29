@@ -1,4 +1,8 @@
 /node_modules
+/public/css
+/public/image
+
+.cache
 
 .env
 *.env

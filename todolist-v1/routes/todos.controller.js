@@ -6,17 +6,20 @@ const { getDate } = require("../services/date");
 
 let error = "";
 
-const homeTodo = function (req, res) {
-    Task.find({}, (err, foundTasks) => {
+const homeTodo = async function (req, res) {
+    try {
+        const tasks = await Task.find({});
         res.render("list", {
             listTitle: getDate(process.env.DAY),
-            newListItems: foundTasks,
+            newListItems: tasks,
             error,
         });
-    });
+    } catch (err) {
+        throw new Error(err);
+    }
 };
 
-const addTask = function (req, res) {
+const addTask = function (req, res, next) {
     // const newTask = req.body.newItem;
     error = "";
     const taskName = req.body.newItem;
@@ -31,10 +34,11 @@ const addTask = function (req, res) {
         try {
             task.save();
             console.log("Successfully saved default task to DB.");
+            return res.redirect("/todo");
         } catch (err) {
-            console.error(`ICI -> ${err}`);
+            throw new Error(err);
+            // console.error(`ICI -> ${err}`);
         }
-        res.redirect("/todo");
     } else {
         List.findOne({ name: listName }, function (err, foundList) {
             if (err) {
