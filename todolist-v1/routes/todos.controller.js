@@ -7,16 +7,28 @@ const { getDate } = require("../services/date");
 let error = "";
 
 const homeTodo = async function (req, res) {
+    const existingList = req.params.listName;
+    let homeOptions = {};
+
     try {
-        const tasks = await Task.find({});
-        res.render("list", {
-            listTitle: getDate(process.env.DAY),
-            newListItems: tasks,
-            error,
-        });
+        if (!existingList) {
+            const tasks = await Task.find({});
+            homeOptions = {
+                listTitle: getDate(process.env.DAY),
+                newListItems: tasks,
+                error,
+            };
+        } else {
+            homeOptions = {
+                listTitle: existingList,
+                newListItems: existingList.items,
+                error,
+            };
+        }
+        res.render("list", homeOptions);
         error = "";
     } catch (err) {
-        console.error(`ICI -> ${err}`);
+        console.error(`hometodo controller function -> ${err}`);
     }
 };
 
@@ -88,7 +100,7 @@ const deleteTask = function (req, res) {
 };
 
 const customList = async function (req, res) {
-    let newList = req.query.newListName;
+    let newList = req.body.newListName;
 
     // if (
     //     req.params.customListName !== "favicon.ico" &&
@@ -101,11 +113,7 @@ const customList = async function (req, res) {
 
         if (existingList) {
             error = "cette liste existe déjà...";
-            res.render("list", {
-                listTitle: existingList.name,
-                newListItems: existingList.items,
-                error,
-            });
+            res.redirect(`${existingList.name}`);
         }
 
         //  function (err, foundList) {
