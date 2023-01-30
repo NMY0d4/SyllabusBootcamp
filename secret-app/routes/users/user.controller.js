@@ -1,30 +1,36 @@
-const User = require("../../models/users.model");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const session = require("express-session");
+const passportLocalMongoose = require("passport-local-mongoose");
+const passport = require("passport");
 
-exports.registerUser = async (req, res, next) => {
+const User = require("../../models/users.model");
+
+exports.registerUser = async (req, res) => {
   try {
-    bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
-      const email = req.body.email;
-      const password = hash;
-      await User.create({ email, password });
-    });
-    res.render("secrets");
+    await User.register(
+      { username: req.body.email },
+      req.body.password,
+      (err, user) => {
+        if (!err) {
+          console.log(req.body.email);
+          passport.authenticate("local")(req, res, () => {
+            res.redirect("/secrets");
+          });
+        } else {
+          throw new Error(err);
+        }
+      }
+    );
   } catch (err) {
-    console.error(err.message);
+    console.error(`ICI registerUser -->${err}`);
+    res.redirect("/register");
   }
 };
 
 exports.loginUser = async (req, res, next) => {
-  const userEmail = req.body.email;
-  const password = req.body.password;
-
   try {
-    const user = await User.findOne({ email: userEmail });
-    bcrypt.compare(password, user.password, function (err, result) {
-      result && res.render("secrets");
-    });
-  } catch (err) {
-    console.error(err.message);
-  }
+  } catch (err) {}
+};
+
+exports.authenticateUser = (req, res, next) => {
+  return req.isAuthenticated() ? res.render("secrets") : res.redirect("/login");
 };
