@@ -1,31 +1,31 @@
 {
-    "name": "todolist-v1",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "watch:scss": "parcel watch public/scss/styles.scss -d public/css --no-source-maps",
-        "watch:js": "parcel app.js",
-        "watch:parcel": "npm run watch:scss && npm run watch:js",
-        "watch:node": "nodemon app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "body-parser": "^1.20.1",
-        "dotenv": "^16.0.3",
-        "ejs": "^3.1.8",
-        "express": "^4.18.2",
-        "lodash": "^4.17.21",
-        "mongoose": "^6.8.3",
-        "node-sass": "^8.0.0",
-        "nodemon": "^2.0.20",
-        "parcel-bundler": "^1.12.5",
-        "path": "^0.12.7"
-    },
-    "devDependencies": {
-        "sass": "^1.57.1"
-    }
+  "name": "todolist-v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "watch:scss": "parcel watch public/scss/styles.scss -d public/css --no-source-maps",
+    "watch:js": "parcel app.js",
+    "watch:parcel": "npm run watch:scss",
+    "watch:node": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.8.3",
+    "node-sass": "^8.0.0",
+    "nodemon": "^2.0.20",
+    "parcel-bundler": "^1.12.5",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "sass": "^1.57.1"
+  }
 }
