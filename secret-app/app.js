@@ -46,7 +46,7 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-app.post("/register", () => {});
+// app.post("/register", () => {});
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}...`);

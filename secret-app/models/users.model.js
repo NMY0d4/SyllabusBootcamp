@@ -5,13 +5,12 @@ const passport = require("passport");
 // const encrypt = require("mongoose-encryption");
 
 const userSchema = new mongoose.Schema({
-  email: {
+  username: {
     type: String,
     required: true,
   },
   password: {
     type: String,
-    required: true,
   },
 });
 
@@ -24,9 +23,8 @@ userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
-
 passport.use(User.createStrategy());
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+module.exports = User;
