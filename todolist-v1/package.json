@@ -5,8 +5,6 @@
   "main": "app.js",
   "scripts": {
     "watch:scss": "parcel watch public/scss/styles.scss -d public/css --no-source-maps",
-    "watch:js": "parcel app.js",
-    "watch:parcel": "npm run watch:scss",
     "watch:node": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

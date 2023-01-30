@@ -121,9 +121,10 @@ form.item {
 }
 
 .add-button {
-    min-height: 50px;
+    transition: all 0.3s;
+    min-height: 40px;
     margin-left: 0.5rem;
-    width: 50px;
+    width: 40px;
     border-radius: 50%;
     border-color: transparent;
     background-color: var(--color-primary-dark);
@@ -132,6 +133,9 @@ form.item {
     padding-bottom: 2px;
     border-width: 0;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.2);
+    }
 }
 
 input[type="text"] {
