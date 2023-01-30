@@ -15,7 +15,7 @@
   --color-primary-light: #f74752;
   --color-primary-dark: #a1030d;
   /* Secondary */
-  --color-secondary: #ff5403;
+  --color-secondary: #ff3503;
   --color-secondary-light: #ff8147;
   --color-secondary-dark: #ad3902;
   --color-tertiary: #ffca03;
@@ -184,18 +184,20 @@ footer {
   .modal form .modal--input {
     background-color: var(--color-Grey-light-1); }
   .modal__close-modal {
+    transition: 0.3s;
     position: absolute;
     top: 1rem;
     right: 1rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
     padding-bottom: 0.5rem;
     width: 2rem;
     height: 2rem;
     border: none;
     border-radius: 5px;
-    background-color: var(--color-secondary-dark); }
-  .modal__close-modal:hover {
-    background-color: var(--color-secondary); }
+    background-color: inherit; }
+    .modal__close-modal:hover {
+      transform-origin: center;
+      transform: rotate(45deg); }
 
 .overlay {
   position: absolute;

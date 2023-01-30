@@ -38,20 +38,21 @@
         }
     }
     &__close-modal {
+        transition: 0.3s;
         position: absolute;
         top: 1rem;
         right: 1rem;
-        font-size: 1.8rem;
+        font-size: 2rem;
         padding-bottom: 0.5rem;
         width: 2rem;
         height: 2rem;
         border: none;
         border-radius: 5px;
-
-        background-color: var(--color-secondary-dark);
-    }
-    &__close-modal:hover {
-        background-color: var(--color-secondary);
+        background-color: inherit;
+        &:hover {
+            transform-origin: center;
+            transform: rotate(45deg);
+        }
     }
 }
 
