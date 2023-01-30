@@ -3,8 +3,13 @@ const passport = require("passport");
 const User = require("../../models/users.model");
 
 exports.logoutUser = (req, res) => {
-  req.logout();
-  res.redirect("/");
+  req.logout((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  });
 };
 
 exports.registerUser = async (req, res) => {
