@@ -48,3 +48,15 @@ exports.loginUser = async (req, res, next) => {
 exports.authenticateUser = (req, res, next) => {
   return req.isAuthenticated() ? res.render("secrets") : res.redirect("/login");
 };
+
+exports.authGoogle = (req, res, next) => {
+  passport.authenticate("google", { scope: ["profile"] });
+};
+
+exports.authcallBack = (req, res, next) => {
+  passport.authenticate("google", { failureRedirect: "/login" }),
+    function (req, res) {
+      // Successful authentication, redirect home.
+      res.redirect("/");
+    };
+};
