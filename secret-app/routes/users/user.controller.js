@@ -13,20 +13,6 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
-  // User.register(
-  //   { username: req.body.email },
-  //   req.body.password,
-  //   function (err, user) {
-  //     if (err) {
-  //       console.log(`ICI registerUser -->${err}`);
-  //       res.redirect("/register");
-  //     } else {
-  //       passport.authenticate("local")(req, res, function () {
-  //         res.redirect("/secrets");
-  //       });
-  //     }
-  //   }
-  // );
   try {
     await User.register({ username: req.body.username }, req.body.password);
 
