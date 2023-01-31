@@ -36,7 +36,6 @@ exports.loginUser = async (req, res, next) => {
         console.error(`ICI loginUser -->${err}`);
       } else {
         passport.authenticate("local")(req, res, function () {
-          console.log(req.body.username);
           res.redirect("/users/secrets");
         });
       }

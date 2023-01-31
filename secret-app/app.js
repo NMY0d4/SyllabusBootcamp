@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 require("./services/mongo").mongoConnect();
 
 const session = require("express-session");
-const passportLocalMongoose = require("passport-local-mongoose");
 const passport = require("passport");
 
 const ejs = require("ejs");
