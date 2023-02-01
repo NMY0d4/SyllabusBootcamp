@@ -45,10 +45,18 @@ exports.loginUser = async (req, res, next) => {
     }
 };
 
-exports.authenticateUser = (req, res, next) => {
-    return req.isAuthenticated()
-        ? res.render("secrets")
-        : res.redirect("/login");
+exports.authenticateUser = async (req, res, next) => {
+    try {
+        const foundUser = await User.findOne({ secret: { $ne: null } });
+
+        foundUser
+            ? res.render("secrets", {
+                  secret: foundUser.secret,
+              })
+            : res.redirect("/users/submit");
+    } catch (err) {
+        console.error(err);
+    }
 };
 
 exports.authGoogle = (req, res, next) => {
@@ -69,7 +77,15 @@ exports.submSecret = (req, res, next) => {
         : res.redirect("/login");
 };
 
-exports.submitSecret = (req, res, next) => {
-    console.log(req.body);
-    res.redirect("/");
+exports.submitSecret = async (req, res, next) => {
+    try {
+        const foundUser = await User.findById(req.user.id);
+        if (foundUser) {
+            foundUser.secret = req.body.secret;
+            await foundUser.save();
+            res.redirect("/users/secrets");
+        }
+    } catch (err) {
+        console.error(err);
+    }
 };

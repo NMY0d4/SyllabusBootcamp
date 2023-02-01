@@ -8,12 +8,12 @@ const passport = require("passport");
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
     },
     password: {
         type: String,
     },
     googleId: String,
+    secret: String,
 });
 
 userSchema.plugin(passportLocalMongoose);
