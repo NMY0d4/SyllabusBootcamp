@@ -9,6 +9,16 @@
     transform: scale(1);
     box-shadow: none; } }
 
+.flex {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center; }
+
+.todo-container {
+  max-width: 80%;
+  margin: 0 auto; }
+
 :root {
   /* Primary */
   --color-primary: #f90716;

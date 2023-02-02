@@ -1,47 +1,54 @@
 <%- include("./partials/_header.ejs") -%>
-<div class="todo-container">
-    <div class="box" id="heading">
-        <h1><%= listTitle %></h1>
-    </div>
-    <div class="box box-left">
-        <% newListItems && newListItems.forEach(item => { %>
-        <!-- DELETING AN ELEMENT IN A LIST -->
-        <form action="/todo/delete" method="post">
-            <div class="item">
-                <input
-                    type="checkbox"
-                    name="checkbox"
-                    value="<%= item._id %>"
-                    onChange="this.form.submit()"
-                />
-                <p><%= item.name %></p>
-            </div>
-            <input type="hidden" name="listName" value="<%= listTitle %>" />
-        </form>
-        <% }) %>
+<div class="todo-container flex">
+    <div class="box-left">
+    
+        <div class="box" id="heading">
+            <h1><%= listTitle %></h1>
+        </div>
+        <div class="box box-left">
+            <% newListItems && newListItems.forEach(item => { %>
+            <!-- DELETING AN ELEMENT IN A LIST -->
+            <form action="/todo/delete" method="post">
+                <div class="item">
+                    <input
+                        type="checkbox"
+                        name="checkbox"
+                        value="<%= item._id %>"
+                        onChange="this.form.submit()"
+                    />
+                    <p><%= item.name %></p>
+                </div>
+                <input type="hidden" name="listName" value="<%= listTitle %>" />
+            </form>
+            <% }) %>
 
-        <!-- -------------- Add A TASK ------------------------ -->
-        <form class="item" action="/todo" method="post">
-            <div class="input-container">
-                <input
-                    id="task"
-                    name="newItem"
-                    type="text"
-                    placeholder="add a task"
-                    autocomplete="off"
-                />
-                <div class="error"><%= error %></div>
-            </div>
-            <!-- prettier-ignore -->
-            <button class="add-button" type="submit" name="list" value="<%= listTitle %>">+</button>
-        </form>
+            <!-- -------------- Add A TASK ------------------------ -->
+            <form class="item" action="/todo" method="post">
+                <div class="input-container">
+                    <input
+                        id="task"
+                        name="newItem"
+                        type="text"
+                        placeholder="add a task"
+                        autocomplete="off"
+                    />
+                    <div class="error"><%= error %></div>
+                </div>
+                <!-- prettier-ignore -->
+                <button class="add-button" type="submit" name="list" value="<%= listTitle %>">+</button>
+            </form>
+        </div>
     </div>
 
-    <div class="box box-right">
+    <div class="box-right">
         <h2><%= sideTitle %></h2>
-        <% if(lists) { %> <% lists.forEach((list) => { %>
-        <p><%= list.name %></p>
-        <% }) %> <% } %>
+        <% if(lists) { %>
+            <ul class="ul-lists">            
+                <% lists.forEach((list) => { %>
+                    <li><%= list.name %></li>                
+                <% }) %>
+            </ul>
+            <% } %>
     </div>
 </div>
 
