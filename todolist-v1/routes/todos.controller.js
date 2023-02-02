@@ -100,42 +100,24 @@ const deleteTask = function (req, res) {
 };
 
 const customList = async function (req, res) {
-    let newList = req.body.newListName;
-
+    const newList = _.capitalize(req.body.newListName);
     // if (
     //     req.params.customListName !== "favicon.ico" &&
     //     req.params.customListName !== "todo"
     // ) {
-    newList = _.capitalize(newList);
-
     try {
         const existingList = await List.findOne({ name: newList });
 
         if (existingList) {
             error = "cette liste existe déjà...";
             res.redirect(`${existingList.name}`);
+        } else {
+            await List.create({
+                name: newList,
+                items: [],
+            });
+            res.redirect(`${newList}`);
         }
-
-        //  function (err, foundList) {
-        //     if (!err) {
-        //         if (!foundList) {
-        //             // Create a new list
-        //             List.create({
-        //                 name: customListName,
-        //                 items: [],
-        //             });
-
-        //             res.redirect(`/todo/${customListName}`);
-        //         } else {
-        //             //Show an existing list
-        //             res.render("list", {
-        //                 listTitle: foundList.name,
-        //                 newListItems: foundList.items,
-        //                 error,
-        //             });
-        //         }
-        //     }
-        // });
     } catch (err) {
         console.error(err);
     }
