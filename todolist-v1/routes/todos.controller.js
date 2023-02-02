@@ -8,18 +8,22 @@ let error = "";
 
 const homeTodo = async function (req, res) {
     const existingList = req.params.listName;
-    let homeOptions = {};
+    const lists = await List.find();
+    const sideTitle = lists ? "Mes listes :" : "pas de listes créées.";
+    let homeOptions = { lists, sideTitle };
 
     try {
         if (!existingList) {
             const tasks = await Task.find({});
             homeOptions = {
+                ...homeOptions,
                 listTitle: getDate(process.env.DAY),
                 newListItems: tasks,
                 error,
             };
         } else {
             homeOptions = {
+                ...homeOptions,
                 listTitle: existingList,
                 newListItems: existingList.items,
                 error,
