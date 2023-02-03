@@ -55,6 +55,9 @@
 <!-- --------------------- AFTER LIST ---------------------------------------- -->
 <div class="col-wrap modal-container">
     <a href="/">Retour home</a>
+    <% if (!listTitle.includes(dateTitle)) { %>     
+        <a href="/todo">retour liste du jour</a>
+    <% } %>
 
     <!------------- Modal pour la création de liste ----------------------- -->
     <button class="show-modal">Ajouter une liste</button>
