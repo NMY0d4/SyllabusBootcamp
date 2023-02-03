@@ -45,7 +45,7 @@
         <% if(lists) { %>
             <ul class="ul-lists">            
                 <% lists.forEach((list) => { %>
-                    <li><%= list.name %></li>                
+                    <li><a href="/todo/<%= list.name %>"><%= list.name %></a></li>                
                 <% }) %>
             </ul>
             <% } %>
