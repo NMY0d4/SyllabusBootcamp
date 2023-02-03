@@ -5,12 +5,13 @@ const List = require("../models/lists.model");
 const { getDate } = require("../services/date");
 
 let error = "";
+const dateTitle = getDate(process.env.DAY);
+let sideTitle = "";
 
 const homeTodo = async function (req, res) {
     const existingList = req.params.listName;
     const lists = await List.find();
-    const sideTitle = lists ? "Mes listes :" : "pas de listes créées.";
-    const dateTitle = getDate(process.env.DAY);
+    sideTitle = lists ? "Mes listes :" : "pas de listes créées.";
     let homeOptions = { lists, sideTitle, dateTitle };
 
     try {
@@ -23,10 +24,13 @@ const homeTodo = async function (req, res) {
                 error,
             };
         } else {
+            const displayList = lists.find(
+                (list) => list.name === existingList
+            );
             homeOptions = {
                 ...homeOptions,
-                listTitle: existingList,
-                newListItems: existingList.items,
+                listTitle: displayList.name,
+                newListItems: displayList.items,
                 error,
             };
         }
@@ -49,7 +53,7 @@ const addTask = async function (req, res, next) {
     }
     const task = await new Task({ name: taskName });
 
-    if (listName === getDate(process.env.DAY)) {
+    if (listName === dateTitle) {
         try {
             await task.save();
             console.log("Successfully saved default task to DB.");
@@ -65,11 +69,7 @@ const addTask = async function (req, res, next) {
 
             console.log(`${foundList.name} updated!`);
 
-            res.render("list", {
-                listTitle: foundList.name,
-                newListItems: foundList.items,
-                error,
-            });
+            res.redirect(`/todo/${listName}`);
         } catch (err) {
             console.error(`ICI -> ${err}`);
         }
@@ -80,7 +80,7 @@ const deleteTask = function (req, res) {
     const checkedItemId = req.body.checkbox;
     const listName = req.body.listName;
 
-    if (listName === getDate(process.env.DAY)) {
+    if (listName === dateTitle) {
         Task.findByIdAndRemove(checkedItemId, function (err) {
             if (err) {
                 console.error(err);
